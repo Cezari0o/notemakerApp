@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import routes from './src/routes.js';
+import routes from './src/routes';
 
 dotenv.config();
 
@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 app.use((req, res, next) => {
-  const request = {};
+  const request: any = {};
 
   request['method'] = req.method;
   request['url'] = req.url;
@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 
 app.use(routes);
 
-app.listen(port, () => {
+app.listen(port, () => { 
   console.log(`Servidor rodando na porta ${port}`);
 });
 

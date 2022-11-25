@@ -10,6 +10,8 @@ services:
     volumes:
       - ./backend:/app    
     command: npm run dev
+    depends_on:
+      - mongodb
 
   mongodb:
     container_name: mongodb

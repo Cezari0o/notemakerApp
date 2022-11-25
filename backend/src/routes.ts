@@ -16,4 +16,5 @@ router.get("/about", (req, res) => {
   res.send("Application to manage notes");
 });
 
+
 export default router;
