@@ -12,6 +12,8 @@ services:
     command: npm run dev
     depends_on:
       - mongodb
+    networks:
+      - default
 
   mongodb:
     container_name: mongodb
@@ -30,6 +32,9 @@ services:
       timeout: 20s
       retries: 5
       start_period: 30s
+    networks:
+      - default
+
 
   mongo-express:
     image: mongo-express
@@ -56,3 +61,9 @@ services:
     volumes:
       - ./db_interface:/data
     restart: unless-stopped
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge

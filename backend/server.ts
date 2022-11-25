@@ -1,27 +1,23 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import routes from './src/routes';
+import routes from './routes';
+import logger from './middlewares/logRequests';
+import connectDB from './services/dbConnect';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use((req, res, next) => {
-  const request: any = {};
+// Middlewares
+app.use(logger);
 
-  request['method'] = req.method;
-  request['url'] = req.url;
-  request['time'] = new Date().toTimeString();
-  request['user'] = req.headers['user-agent'];
-
-  console.log(request);
-  next();
-});
-
+// Routes
 app.use(routes);
+
+// Database
+connectDB();
 
 app.listen(port, () => { 
   console.log(`Servidor rodando na porta ${port}`);
 });
-

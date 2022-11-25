@@ -9,3 +9,4 @@ COPY . /app
 
 ENV NODE_ENV=development
 ENV PORT=3000
+ENV MONGO_URI="mongodb://root:root123456@mongodb:27017"
