@@ -1,5 +1,6 @@
 import express from "express";
 import HttpStatus from "http-status-codes";
+import users from '../src/users/routes';
 
 const router = express.Router();
 
@@ -15,6 +16,8 @@ router.get("/about", (req, res) => {
   }
   res.send("Application to manage notes");
 });
+
+router.use('/users', users)
 
 
 export default router;

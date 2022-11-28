@@ -9,7 +9,7 @@ function connectDB() {
     throw new Error('MONGO_URI must be defined');
   }
 
-  mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+  mongoose.connect(process.env.MONGO_URI, { dbName: 'NoteMakerDB' }, (err) => {
     if(err) {
       console.log('Erro ao conectar no banco de dados');
       console.log(err.name, err.message);
