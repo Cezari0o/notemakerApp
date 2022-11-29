@@ -15,7 +15,9 @@ const port = process.env.PORT || 3001;
 app.use(express.json()); // for parsing application/json
 
 // Middlewares
-app.use(logger);
+if(process.env.NODE_ENV === 'development') {
+  app.use(logger);
+}
 
 // Routes
 app.use(routes);

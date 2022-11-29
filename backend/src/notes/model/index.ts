@@ -1,12 +1,11 @@
-import mongoose, { Schema, Types, model } from 'mongoose';
+import { Schema, model, ValidatorProps } from 'mongoose';
 import validator from 'validator';
 
-const ObjectId = Types.ObjectId;
+const ObjectId = Schema.Types.ObjectId;
 
 const NoteSchema = new Schema({
-  user: {
-    type: ObjectId,
-    unique: true,
+  users: {
+    type: [{ type: ObjectId, ref: 'User' }],
     required: true,
   },
   title: {
@@ -16,13 +15,26 @@ const NoteSchema = new Schema({
       validator: (t: String) => {
         return validator.isLength(t as string, { min: 1, max: 100 });
       },
-      message: props => `Title must have less than 100 characters, got ${props.value.length}`,
+      message: (props: ValidatorProps) => `Title must have less than 100 characters, got ${props.value.length}`,
     },
   },
   body: String,
-  tags: [ObjectId],
-  createdAt: Date,
-  lastUpdate: Date,
+  tags: [{type: ObjectId, ref: 'Tag'}],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  lastUpdate: {
+    type: Date,
+    default: Date.now,
+  }
+},{
+  toObject: {
+    transform: (doc, ret) => {
+      delete ret.__v;
+      return ret;
+    }
+  }
 });
 
 const Note = model('Note', NoteSchema);
