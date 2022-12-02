@@ -6,20 +6,20 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     ports:
-      - "8000:3000"
+      - "8010:3000"
     volumes:
       - ./backend:/app    
-    command: npm run dev
+    # command: npm run dev
     depends_on:
       - mongodb
     networks:
-      - default
+      - notemaker_network
 
   mongodb:
     container_name: mongodb
     image: mongo
     ports:
-      - "8001:27017"
+      - "8020:27017"
     restart: unless-stopped
     volumes:
       - ./data:/data/db
@@ -33,7 +33,7 @@ services:
       retries: 5
       start_period: 30s
     networks:
-      - default
+      - notemaker_network
 
 
   mongo-express:
@@ -51,7 +51,7 @@ services:
     depends_on:
       - mongodb
     ports:
-      - 8002:8081
+      - 8030:8081
     healthcheck:
       test: wget --quiet --tries=3 --spider http://admin:admin@localhost:8081 || exit 1
       interval: 1m
@@ -62,8 +62,8 @@ services:
       - ./db_interface:/data
     restart: unless-stopped
     networks:
-      - default
+      - notemaker_network
 
 networks:
-  default:
+  notemaker_network:
     driver: bridge

@@ -1,13 +1,16 @@
 import { Request } from "express";
 import User from "../model";
+import argon2i from 'argon2';
 
-export function createUser(req: Request, done: Function) {
+export async function createUser(req: Request, done: Function) {
   const { name, email, password } = req.body;
+
+  const hashPass = await argon2i.hash(password, { type: argon2i.argon2i, timeCost: 5, secret: Buffer.from(process.env.PEPPER as string) });
 
   const newUser = new User({
     name: name,
     email: email,
-    password: password,
+    password: hashPass,
   });
 
   newUser.save((error, data) => {
