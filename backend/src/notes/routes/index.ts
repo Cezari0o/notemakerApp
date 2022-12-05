@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createNote, getNote, getNotesFromUser, updateNote } from '../controller';
+import { createNote, deleteNote, getNote, getNotesFromUser, updateNote } from '../controller';
 import HttpStatus from 'http-status-codes';
 
 const routes = Router();
@@ -46,7 +46,7 @@ routes.get('/:id', (req, res) => {
 
 });
 
-routes.put('/:id', (req, res) => {
+routes.post('/:id', (req, res) => {
 
   updateNote(req, (error, data) => {
 
@@ -58,5 +58,20 @@ routes.put('/:id', (req, res) => {
     res.status(HttpStatus.OK).json(data);
   });
 });
+
+
+routes.delete('/:id', (req, res) => {
+
+  deleteNote(req, (error, data) => {
+
+    if(error) {
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Error while deleting note', message: error.message });
+      return;
+    }
+
+    res.status(HttpStatus.NO_CONTENT).send();
+  });
+});
+
 
 export default routes;
