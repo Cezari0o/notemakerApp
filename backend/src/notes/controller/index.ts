@@ -3,8 +3,9 @@ import { Request } from 'express';
 import User from '../../users/model';
 import { Document, Types } from 'mongoose';
 import Tag from '../../tags/model';
+import { CallbackFn } from '../util/callback';
 
-export async function createNote(req: Request, done: Function) { 
+export async function createNote(req: Request, done: CallbackFn) { 
   const { userId, title, body } = req.body;
   let user: Document<any, any, typeof User> | null = null;
 
@@ -15,7 +16,7 @@ export async function createNote(req: Request, done: Function) {
       return done(error, null);
     }
   } catch(error) {
-    return done(error, null);
+    return done(error as { message: string }, null);
   }
 
   const note = new Note({
@@ -33,7 +34,7 @@ export async function createNote(req: Request, done: Function) {
   })
 }
 
-export async function getNote(req: Request, done: Function) {
+export async function getNote(req: Request, done: CallbackFn) {
   const { id } = req.params;
   
   Note.findById(id, undefined, (error, note) => {
@@ -51,7 +52,7 @@ export async function getNote(req: Request, done: Function) {
   });
 }
 
-export async function getNotesFromUser(req: Request, done: Function) {
+export async function getNotesFromUser(req: Request, done: CallbackFn) {
   const { userId } = req.params;
 
   Note.find({ users: userId }, undefined, (error, notes) => {
@@ -60,11 +61,11 @@ export async function getNotesFromUser(req: Request, done: Function) {
       done(error);
       return;
     }
-    done(null, notes.map(note => note.toObject()));
+    done(null, notes.map(note => note.toObject()) as any);
   }); 
 }
 
-export async function updateNote(req: Request, done: Function) {
+export async function updateNote(req: Request, done: CallbackFn) {
   const { id } = req.params;
   const { title, body, users, tags } = req.body;
   
@@ -96,14 +97,14 @@ export async function updateNote(req: Request, done: Function) {
       return;
     });
   } catch(error) {
-    done(error);
+    done(error as Error);
     return;
   }
 
   return;
 }
 
-export async function deleteNote(req: Request, done: Function) {
+export async function deleteNote(req: Request, done: CallbackFn) {
   const { id } = req.params;
 
   try {
@@ -125,7 +126,7 @@ export async function deleteNote(req: Request, done: Function) {
     });
 
   } catch(error) {
-    done(error);
+    done(error as Error);
     return;
   }
 

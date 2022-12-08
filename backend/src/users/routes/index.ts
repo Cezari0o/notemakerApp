@@ -1,6 +1,6 @@
 import { Router } from "express";
 import HttpStatus from "http-status-codes";
-import { createUser, getUserById, getUserByName } from "../controller";
+import { createUser, getUserById } from "../controller";
 
 const routes = Router();
 

@@ -14,7 +14,7 @@ routes.get('/:id', (req, res) => {
       return;
     }
 
-    res.status(HttpStatus.OK).json(data.toObject());
+    res.status(HttpStatus.OK).json(data);
   })
 });
 
@@ -27,7 +27,7 @@ routes.post('/', (req, res) => {
       return;
     }
 
-    res.status(HttpStatus.CREATED).json(data.toObject());
+    res.status(HttpStatus.CREATED).json(data);
   });
 });
 

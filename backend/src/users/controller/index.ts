@@ -1,8 +1,9 @@
 import { Request } from "express";
 import User from "../model";
 import argon2i from 'argon2';
+import { CallbackFn } from "../util/callback";
 
-export async function createUser(req: Request, done: Function) {
+export async function createUser(req: Request, done: CallbackFn) {
   const { name, email, password } = req.body;
 
   const hashPass = await argon2i.hash(password, { type: argon2i.argon2i, timeCost: 5, secret: Buffer.from(process.env.PEPPER as string) });
@@ -22,7 +23,7 @@ export async function createUser(req: Request, done: Function) {
   });
 }
 
-export function getUserById(req: Request, done: Function) {
+export function getUserById(req: Request, done: CallbackFn) {
   const { id } = req.params;
 
   User.findById(id, undefined, (error, user) => {

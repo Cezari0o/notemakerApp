@@ -2,16 +2,16 @@ import { Request } from "express";
 import { Document } from "mongoose";
 import User from "../../users/model";
 import Tag from "../model";
+import { CallbackFn } from "../util/callback";
 
-export async function createTag(req: Request, done: Function) {
+export async function createTag(req: Request, done: CallbackFn) {
   const { title, userId } = req.body;
-
-
   let user: Document | null = null;
+  
   try {
     user = await User.findById(userId).exec();
   } catch(error) {
-    done(error);
+    done(error as Error);
     return;
   }
   const tag = new Tag({ title: title, userId: user });
@@ -22,11 +22,11 @@ export async function createTag(req: Request, done: Function) {
       done(error);
       return;
     }
-    done(null, data);
+    done(null, data.toObject());
   });
 }
 
-export async function getTag(req: Request, done: Function) {
+export async function getTag(req: Request, done: CallbackFn) {
   const { id } = req.params;
 
   Tag.findById(id, undefined, undefined, (error, data) => {
@@ -42,12 +42,12 @@ export async function getTag(req: Request, done: Function) {
       return;
     }
 
-    done(null, data);
+    done(null, data.toObject());
   });
 }
 
 
-export async function deleteTag(req: Request, done: Function) {
+export async function deleteTag(req: Request, done: CallbackFn) {
   const { id } = req.params;
 
   Tag.findById(id, undefined, undefined, (error, data) => {
@@ -76,7 +76,7 @@ export async function deleteTag(req: Request, done: Function) {
 
 }
 
-export async function getTagsFromUser(req: Request, done: Function) {
+export async function getTagsFromUser(req: Request, done: CallbackFn) {
   const { id } = req.params;
   
   Tag.find({ userId: id }, undefined, undefined, (error, data) => {
@@ -87,13 +87,13 @@ export async function getTagsFromUser(req: Request, done: Function) {
     }
 
     done(null, data.map(d => {
-      const ret: { userId?: any } = d.toObject();
+      const ret: { userId?: any } & (typeof Tag) = d.toObject();
 
       delete ret.userId;
 
       return ret;
 
-    }));  
+    }) as any);  
   });
 
 }
