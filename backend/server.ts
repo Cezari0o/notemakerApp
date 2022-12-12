@@ -2,9 +2,10 @@ import express from 'express';
 import dotenv from 'dotenv';
 import routes from './routes';
 import logger from './middlewares/logRequests';
+import auth from './middlewares/auth'
 import connectDB from './services/dbConnect';
 import HttpStatus from "http-status-codes";
-
+import errorHandler from './middlewares/errorHandler';
 
 dotenv.config();
 
@@ -18,6 +19,9 @@ app.use(express.json()); // for parsing application/json
 if(process.env.NODE_ENV === 'development') {
   app.use(logger);
 }
+app.use(auth);
+app.use(errorHandler);
+
 
 // Routes
 app.use(routes);

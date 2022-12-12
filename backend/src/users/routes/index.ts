@@ -19,18 +19,18 @@ routes.post('/', (req, res) => {
 });
 
 // Get user by id
-routes.get('/:id', (req, res) => {
+// routes.get('/:id', (req, res) => {
 
-  getUserById(req, (error: any, data: any) => {
+//   getUserById(req, (error: any, data: any) => {
 
-    if(error) {
-      res.status(HttpStatus.NOT_FOUND).json({ error: 'Searching went wrong!', message: error.message });
-      return;
-    }
+//     if(error) {
+//       res.status(HttpStatus.NOT_FOUND).json({ error: 'Searching went wrong!', message: error.message });
+//       return;
+//     }
 
-    res.status(HttpStatus.OK).json(data);
-  })
+//     res.status(HttpStatus.OK).json(data);
+//   })
 
-});
+// });
 
 export default routes;

@@ -3,6 +3,7 @@ import HttpStatus from "http-status-codes";
 import users from '../src/users/routes';
 import notes from '../src/notes/routes';
 import tags from '../src/tags/routes';
+import auth from '../src/authentication/routes'
 
 const router = express.Router();
 
@@ -22,5 +23,6 @@ router.get("/about", (req, res) => {
 router.use('/users', users);
 router.use('/notes', notes);
 router.use('/tags', tags);
+router.use('/login', auth);
 
 export default router;
