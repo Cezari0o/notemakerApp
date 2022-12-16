@@ -7,6 +7,11 @@ import { CallbackFn } from "../util/callback";
 export async function createTag(req: Request, done: CallbackFn) {
   const { title, userId } = req.body;
   let user: Document | null = null;
+
+  if(userId != req['auth'].userId) {
+    done(new Error('Invalid user id!'));
+    return;
+  }
   
   try {
     user = await User.findById(userId).exec();
@@ -42,6 +47,11 @@ export async function getTag(req: Request, done: CallbackFn) {
       return;
     }
 
+    if(data.userId != req['auth'].userId) {
+      done(new Error('Tag not found!'), null);
+      return;
+    }
+
     done(null, data.toObject());
   });
 }
@@ -63,6 +73,11 @@ export async function deleteTag(req: Request, done: CallbackFn) {
       return;
     }
 
+    if(data.userId !== req['auth'].userId) {
+      done(new Error('Tag not found!'), null);
+      return;
+    }
+
     data.delete((error, result) => {
 
       if(error) {
@@ -78,6 +93,11 @@ export async function deleteTag(req: Request, done: CallbackFn) {
 
 export async function getTagsFromUser(req: Request, done: CallbackFn) {
   const { id } = req.params;
+
+  if(id !== req['auth'].userId) {
+    done(null, [] as any);
+    return;
+  }
   
   Tag.find({ userId: id }, undefined, undefined, (error, data) => {
 

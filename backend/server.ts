@@ -6,6 +6,7 @@ import auth from './middlewares/auth'
 import connectDB from './services/dbConnect';
 import HttpStatus from "http-status-codes";
 import errorHandler from './middlewares/errorHandler';
+import userParser from './middlewares/userParser';
 
 dotenv.config();
 
@@ -21,7 +22,6 @@ if(process.env.NODE_ENV === 'development') {
 }
 app.use(auth);
 app.use(errorHandler);
-
 
 // Routes
 app.use(routes);
