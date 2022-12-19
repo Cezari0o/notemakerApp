@@ -51,7 +51,7 @@ routes.post('/:id', (req, res) => {
   updateNote(req, (error, data) => {
 
     if(error) {
-      res.status(HttpStatus.BAD_REQUEST).json({ error: 'Error while updating note', message: error.message });
+      res.status(data === null? HttpStatus.BAD_REQUEST : HttpStatus.NOT_FOUND).json({ error: 'Error while updating note', message: error.message });
       return;
     }
 

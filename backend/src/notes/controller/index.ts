@@ -6,8 +6,10 @@ import Tag from '../../tags/model';
 import { CallbackFn } from '../util/callback';
 
 export async function createNote(req: Request, done: CallbackFn) { 
-  const { userId, title, body } = req.body;
+  const { title, body } = req.body;
   let user: Document<any, any, typeof User> | null = null;
+
+  const userId : string = req['auth']['userId'];
 
   try {
     user = await User.findById(userId).exec();
@@ -36,7 +38,8 @@ export async function createNote(req: Request, done: CallbackFn) {
 
 export async function getNote(req: Request, done: CallbackFn) {
   const { id } = req.params;
-  
+  const userId = req['auth']['userId'];
+
   Note.findById(id, undefined, (error, note) => {
 
     if(error) {
@@ -48,12 +51,23 @@ export async function getNote(req: Request, done: CallbackFn) {
       return done(error, null);  
     }
 
+    // Verifying user permission
+    if(!note.users.find(v => userId == v)) {
+      return done(new Error('Note not found!'), null);
+    }
+
     return done(null, note.toObject());
   });
 }
 
 export async function getNotesFromUser(req: Request, done: CallbackFn) {
   const { userId } = req.params;
+
+  const fromTokenUserId = req['auth']['userId'];
+  // Verifying user permission
+  if(userId != fromTokenUserId) {
+    return done(null, [] as any);
+  }
 
   Note.find({ users: userId }, undefined, (error, notes) => {
 
@@ -71,6 +85,7 @@ export async function updateNote(req: Request, done: CallbackFn) {
   
   const fieldstoUpdate = {title, body, users, tags};
   const toUpdate = {};
+  const userId = req['auth']['userId'];
 
   for(const f in fieldstoUpdate) {
     if(fieldstoUpdate[f]) {
@@ -85,6 +100,11 @@ export async function updateNote(req: Request, done: CallbackFn) {
       const error = { message: 'Note not found!' };
       done(error, null);
       return;
+    }
+
+    // Verifying user permission
+    if(!note.users.find(u => userId == u)) {
+      return done(new Error('Note not found!'), null);
     }
 
     note.set(toUpdate);
@@ -106,6 +126,7 @@ export async function updateNote(req: Request, done: CallbackFn) {
 
 export async function deleteNote(req: Request, done: CallbackFn) {
   const { id } = req.params;
+  const userId = req['auth']['userId'];
 
   try {
     const note = await Note.findById(id).exec();
@@ -114,6 +135,11 @@ export async function deleteNote(req: Request, done: CallbackFn) {
       const error = { message: 'Note not found!' };
       done(error);
       return;
+    }
+
+    // Verifying user permission
+    if(!note.users.find(u => userId == u)) {
+      return done(new Error('Note not found!'), null);
     }
 
     note.delete((error, result) => {
