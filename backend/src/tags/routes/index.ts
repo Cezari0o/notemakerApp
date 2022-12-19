@@ -10,7 +10,7 @@ routes.get('/:id', (req, res) => {
   getTag(req, (error, data) => {
 
     if(error) {
-      res.status(data === undefined? HttpStatus.BAD_REQUEST : HttpStatus.NOT_FOUND).json({ error: 'Error while retrieving tag!', message: error.message });
+      res.status(data === undefined? HttpStatus.BAD_REQUEST : HttpStatus.NOT_FOUND).json({ error: 'Error while retrieving tag', message: error.message });
       return;
     }
 
@@ -23,7 +23,7 @@ routes.post('/', (req, res) => {
   createTag(req, (error, data) => {
 
     if(error) {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Error while creating tag!', message: error.message });
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Error while creating tag', message: error.message });
       return;
     }
 
@@ -36,7 +36,7 @@ routes.delete('/:id', (req, res) => {
   deleteTag(req, (error, data) => {
 
     if(error) {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Error while deleting tag!', message: error.message });
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Error while deleting tag', message: error.message });
       return;
     }
     res.status(HttpStatus.NO_CONTENT).send();
@@ -48,7 +48,7 @@ routes.get('/user/:id', (req, res) => {
   getTagsFromUser(req, (error, data) => {
 
     if(error) {
-      res.status(HttpStatus.BAD_REQUEST).json({ error: 'Error while retrieving tags!', message: error.message });
+      res.status(HttpStatus.BAD_REQUEST).json({ error: 'Error while retrieving tags', message: error.message });
     }
 
     res.status(HttpStatus.OK).json(data);
