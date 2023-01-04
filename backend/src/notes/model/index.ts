@@ -21,28 +21,23 @@ const NoteSchema = new Schema({
   },
   body: String,
   tags: [{type: ObjectId, ref: 'Tag'}],
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  lastUpdate: {
-    type: Date,
-    default: Date.now,
-  }
 },{
   toObject: {
     transform: (doc, ret) => {
       delete ret.__v;
       return ret;
     }
+  },
+  timestamps: {
+    updatedAt: 'lastUpdate',
   }
 });
 
-NoteSchema.pre('save', function(next) {
+// NoteSchema.pre('save', function(next) {
 
-  this.lastUpdate = new Date();
-  next();
-});
+//   this.lastUpdate = new Date();
+//   next();
+// });
 
 
 NoteSchema.pre('validate', validateUsers);

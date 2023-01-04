@@ -13,27 +13,23 @@ const TagSchema = new Schema({
     required: true,
     ref: 'User',
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  lastUpdate: {
-    type: Date,
-    default: Date.now,
-  },
 }, {
   toObject: {
     transform: (doc, ret) => {
       delete ret.__v;
       return ret;
     }
+  },
+
+  timestamps: {
+    updatedAt: 'lastUpdate',
   }
 });
 
-TagSchema.pre('save', function (next) {
-  this.lastUpdate = new Date();
-  next();
-});
+// TagSchema.pre('save', function (next) {
+//   this.lastUpdate = new Date();
+//   next();
+// });
 
 TagSchema.pre('validate', validateUser);
 

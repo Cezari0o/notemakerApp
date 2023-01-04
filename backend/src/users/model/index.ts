@@ -10,7 +10,7 @@ const UserSchema = new Schema({
       
         return validator.isLength(name as string, { min: 1, max: 150 });
       },
-      message: (props: ValidatorProps) => `Name must have at least 1 character, got ${props.value.length}`,
+      message: (props: ValidatorProps) => `Name length must be >= 1 and <= 150, got ${props.value.length}`,
     }
   },
   email: {
@@ -30,14 +30,6 @@ const UserSchema = new Schema({
       message: () => `Password must be strong (see the docs for more info)`,
     },
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  lastUpdate: {
-    type: Date,
-    default: Date.now,
-  }
 }, {
   toObject: {
     transform: (doc, ret) => {
@@ -45,15 +37,18 @@ const UserSchema = new Schema({
       delete ret.__v;
       return ret;
     }
+  },
+  timestamps: {
+    updatedAt: 'lastUpdate',
   }
 });
 
 const User = model('User', UserSchema);
 
-UserSchema.pre('save', function(next) {
+// UserSchema.pre('save', function(next) {
 
-  this.lastUpdate = new Date();
-  next();
-});
+//   this.lastUpdate = new Date();
+//   next();
+// });
 
 export default User;
