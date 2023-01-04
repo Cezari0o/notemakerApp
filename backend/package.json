@@ -12,7 +12,9 @@
     "start": "node dist/server.js",
     "dev": "tsnd --respawn --poll --transpile-only server.ts",
     "build": "npx tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate:up": "migrate-mongo up",
+    "migrate:down": "migrate-mongo down"
   },
   "dependencies": {
     "argon2": "^0.30.2",
@@ -21,6 +23,7 @@
     "express-jwt": "^7.7.7",
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
+    "migrate": "^1.8.0",
     "mongoose": "^6.7.4",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3",

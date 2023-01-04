@@ -7,6 +7,7 @@ import connectDB from './services/dbConnect';
 import HttpStatus from "http-status-codes";
 import errorHandler from './middlewares/errorHandler';
 import userParser from './middlewares/userParser';
+import migratePls from './migrate';
 
 dotenv.config();
 
@@ -35,5 +36,7 @@ app.use((req, res, next) => {
 });
 
 app.listen(port, () => { 
-  console.log(`Servidor rodando na porta ${port}`);
+  console.log(`Server runing on port ${port}`);
 });
+
+migratePls();
